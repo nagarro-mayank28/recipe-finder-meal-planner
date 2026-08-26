@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  font-family: var(--rk-font-sans, system-ui, sans-serif);
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--rk-color-surface, #fff);
+  border: 1px solid var(--rk-color-border, #e6e1da);
+  border-radius: var(--rk-radius-lg, 16px);
+  box-shadow: var(--rk-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.06));
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--rk-color-surface-alt, #f7f5f2);
+  border-radius: var(--rk-radius-pill, 999px);
+}
+
+.field:focus-within {
+  box-shadow: var(--rk-focus-ring, 0 0 0 3px rgba(194, 65, 12, 0.35));
+}
+
+.icon {
+  font-size: 0.95rem;
+  line-height: 1;
+  flex: none;
+}
+
+.spinner {
+  display: block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid var(--rk-color-border, #e6e1da);
+  border-top-color: var(--rk-color-primary, #c2410c);
+  border-radius: 50%;
+  animation: rk-spin 0.7s linear infinite;
+}
+
+@keyframes rk-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: var(--rk-color-text, #1f1b16);
+  outline: none;
+}
+
+.input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clear,
+.submit {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--rk-radius-pill, 999px);
+}
+
+.clear {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  color: var(--rk-color-muted, #7a7168);
+  background: transparent;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.clear:hover {
+  color: var(--rk-color-text, #1f1b16);
+  background: var(--rk-color-border, #e6e1da);
+}
+
+.submit {
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  color: var(--rk-color-on-primary, #fff);
+  background: var(--rk-color-primary, #c2410c);
+}
+
+.submit:hover {
+  background: var(--rk-color-primary-hover, #9a3412);
+}
+
+.submit:focus-visible,
+.clear:focus-visible {
+  outline: none;
+  box-shadow: var(--rk-focus-ring, 0 0 0 3px rgba(194, 65, 12, 0.35));
+}

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Recipe UI Kit — component gallery</title>
+
+		<!-- Lazy loader: fine here because the page is served as static files. -->
+		<script type="module" src="/build/recipe-ui-kit.esm.js"></script>
+		<script nomodule src="/build/recipe-ui-kit.js"></script>
+		<link rel="stylesheet" href="/build/recipe-ui-kit.css" />
+
+		<style>
+			body {
+				margin: 0;
+				padding: 2rem 1.5rem 4rem;
+				font-family: var(--rk-font-sans);
+				color: var(--rk-color-text);
+				background: var(--rk-color-surface-alt);
+			}
+
+			main {
+				width: min(64rem, 100%);
+				margin: 0 auto;
+			}
+
+			h1 {
+				margin: 0 0 0.25rem;
+				font-size: 1.6rem;
+				letter-spacing: -0.02em;
+			}
+
+			.lede {
+				margin: 0 0 2.5rem;
+				color: var(--rk-color-muted);
+			}
+
+			section {
+				margin-bottom: 2.5rem;
+			}
+
+			h2 {
+				margin: 0 0 0.9rem;
+				font-size: 0.75rem;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--rk-color-muted);
+			}
+
+			.grid {
+				display: grid;
+				gap: 1rem;
+				grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+			}
+
+			.row {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.6rem;
+			}
+
+			.planner {
+				display: grid;
+				gap: 0.5rem;
+				grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+			}
+
+			button.demo {
+				padding: 0.6rem 1.1rem;
+				font: inherit;
+				font-weight: 600;
+				cursor: pointer;
+				color: #fff;
+				background: var(--rk-color-primary);
+				border: none;
+				border-radius: var(--rk-radius-md);
+			}
+
+			#log {
+				min-height: 3rem;
+				padding: 0.75rem 1rem;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 0.8rem;
+				color: var(--rk-color-muted);
+				background: var(--rk-color-surface);
+				border: 1px solid var(--rk-color-border);
+				border-radius: var(--rk-radius-md);
+				white-space: pre-wrap;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<h1>Recipe UI Kit</h1>
+			<p class="lede">
+				Every component in the library, with live events logged at the bottom of the page.
+			</p>
+
+			<section>
+				<h2>Search bar &middot; with filters in its slot</h2>
+				<rk-search-bar id="search" placeholder="Try &ldquo;chicken&rdquo;…">
+					<div slot="filters" class="row">
+						<rk-filter-select id="category" name="category" label="Category" placeholder="All">
+						</rk-filter-select>
+					</div>
+				</rk-search-bar>
+			</section>
+
+			<section>
+				<h2>Recipe cards &middot; badges in <code>meta</code>, buttons in <code>actions</code></h2>
+				<div class="grid" id="cards"></div>
+			</section>
+
+			<section>
+				<h2>Badges</h2>
+				<div class="row">
+					<rk-badge label="Neutral"></rk-badge>
+					<rk-badge variant="primary" label="Primary"></rk-badge>
+					<rk-badge variant="danger" label="Danger"></rk-badge>
+					<rk-badge>Slotted content</rk-badge>
+				</div>
+			</section>
+
+			<section>
+				<h2>Ingredient list &middot; array prop + header slot</h2>
+				<rk-ingredient-list id="ingredients">
+					<rk-badge slot="header" label="4 items"></rk-badge>
+				</rk-ingredient-list>
+			</section>
+
+			<section>
+				<h2>Meal slots &middot; empty and filled</h2>
+				<div class="planner" id="slots">
+					<rk-meal-slot day="monday" meal="breakfast"></rk-meal-slot>
+					<rk-meal-slot
+						day="monday"
+						meal="lunch"
+						recipe-id="52772"
+						recipe-name="Teriyaki Chicken Casserole"
+						recipe-thumbnail="https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+					>
+						<rk-badge variant="danger" label="Yours"></rk-badge>
+					</rk-meal-slot>
+					<rk-meal-slot day="monday" meal="dinner"></rk-meal-slot>
+				</div>
+			</section>
+
+			<section>
+				<h2>Empty state &middot; action in its slot</h2>
+				<rk-empty-state icon="🔍" heading="No recipes matched" message="Try a different search term.">
+					<button class="demo" type="button">Clear filters</button>
+				</rk-empty-state>
+			</section>
+
+			<section>
+				<h2>Modal &middot; body + footer slots</h2>
+				<button class="demo" type="button" id="open-modal">Open the dialog</button>
+
+				<rk-modal id="modal" heading="Add to meal plan">
+					<p style="margin: 0">
+						The host owns the <code>open</code> prop; the component only asks to be closed by
+						emitting <code>rkClose</code>.
+					</p>
+					<div slot="footer" class="row">
+						<button class="demo" type="button" id="modal-close">Done</button>
+					</div>
+				</rk-modal>
+			</section>
+
+			<section>
+				<h2>Event log</h2>
+				<div id="log">Interact with anything above…</div>
+			</section>
+		</main>
+
+		<script type="module">
+			const log = document.getElementById('log');
+			const lines = [];
+
+			function record(name, detail) {
+				lines.unshift(`${name} → ${JSON.stringify(detail)}`);
+				log.textContent = lines.slice(0, 8).join('\n');
+			}
+
+			/* ---- object props must be assigned as properties, not attributes ---- */
+
+			document.getElementById('category').options = [
+				{ value: 'Chicken', label: 'Chicken' },
+				{ value: 'Seafood', label: 'Seafood' },
+				{ value: 'Dessert', label: 'Dessert' }
+			];
+
+			document.getElementById('ingredients').items = [
+				{ name: 'Chicken breast', measure: '500 g' },
+				{ name: 'Soy sauce', measure: '3 tbsp' },
+				{ name: 'Brown sugar', measure: '2 tbsp' },
+				{ name: 'Garlic' }
+			];
+
+			/* ---- cards, built from data to show the slots in use ---- */
+
+			const recipes = [
+				{
+					id: '52772',
+					name: 'Teriyaki Chicken Casserole',
+					thumb: 'https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg',
+					category: 'Chicken',
+					area: 'Japanese',
+					favorite: true
+				},
+				{
+					id: '52959',
+					name: 'Baked Salmon with Fennel & Tomatoes',
+					thumb: 'https://www.themealdb.com/images/media/meals/1548772327.jpg',
+					category: 'Seafood',
+					area: 'British',
+					favorite: false
+				},
+				{
+					id: '52855',
+					name: 'Banana Pancakes',
+					thumb: 'https://www.themealdb.com/images/media/meals/sywswr1511383814.jpg',
+					category: 'Dessert',
+					area: 'American',
+					favorite: false
+				}
+			];
+
+			const cards = document.getElementById('cards');
+
+			for (const recipe of recipes) {
+				const card = document.createElement('rk-recipe-card');
+				card.setAttribute('recipe-id', recipe.id);
+				card.setAttribute('name', recipe.name);
+				card.setAttribute('thumbnail', recipe.thumb);
+				if (recipe.favorite) card.setAttribute('favorite', 'true');
+
+				for (const [label, variant] of [
+					[recipe.category, 'primary'],
+					[recipe.area, 'neutral']
+				]) {
+					const badge = document.createElement('rk-badge');
+					badge.setAttribute('slot', 'meta');
+					badge.setAttribute('label', label);
+					badge.setAttribute('variant', variant);
+					card.appendChild(badge);
+				}
+
+				const action = document.createElement('button');
+				action.setAttribute('slot', 'actions');
+				action.className = 'demo';
+				action.style.padding = '0.35rem 0.7rem';
+				action.style.fontSize = '0.8rem';
+				action.textContent = '+ Plan';
+				card.appendChild(action);
+
+				cards.appendChild(card);
+			}
+
+			/* ---- events ---- */
+
+			document.addEventListener('rkSearch', (e) => record('rkSearch', e.detail));
+			document.addEventListener('rkSearchSubmit', (e) => record('rkSearchSubmit', e.detail));
+			document.addEventListener('rkFilterChange', (e) => record('rkFilterChange', e.detail));
+			document.addEventListener('rkAssign', (e) => record('rkAssign', e.detail));
+			document.addEventListener('rkRemove', (e) => record('rkRemove', e.detail));
+			document.addEventListener('rkOpen', (e) => record('rkOpen', e.detail));
+
+			document.addEventListener('rkFavoriteToggle', (e) => {
+				record('rkFavoriteToggle', e.detail);
+				// The host owns the state — mirror the requested value back down.
+				e.target.favorite = e.detail.favorite;
+			});
+
+			const modal = document.getElementById('modal');
+			document.getElementById('open-modal').addEventListener('click', () => (modal.open = true));
+			document.getElementById('modal-close').addEventListener('click', () => (modal.open = false));
+			modal.addEventListener('rkClose', () => {
+				record('rkClose', null);
+				modal.open = false;
+			});
+		</script>
+	</body>
+</html>

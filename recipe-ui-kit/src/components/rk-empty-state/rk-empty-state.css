@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  font-family: var(--rk-font-sans, system-ui, sans-serif);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--rk-color-surface, #fff);
+  border: 1px dashed var(--rk-color-border, #e6e1da);
+  border-radius: var(--rk-radius-lg, 16px);
+}
+
+.icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--rk-color-text, #1f1b16);
+}
+
+.message {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--rk-color-muted, #7a7168);
+}
+
+.action:not(:has(*)) {
+  display: none;
+}
+
+.action {
+  margin-top: 0.5rem;
+}

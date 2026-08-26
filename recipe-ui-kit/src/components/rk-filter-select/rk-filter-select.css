@@ -1,0 +1,45 @@
+:host {
+  display: inline-block;
+  font-family: var(--rk-font-sans, system-ui, sans-serif);
+}
+
+.wrap {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.label {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rk-color-muted, #7a7168);
+}
+
+.select {
+  appearance: none;
+  min-width: 9rem;
+  padding: 0.55rem 2rem 0.55rem 0.8rem;
+  font: inherit;
+  color: var(--rk-color-text, #1f1b16);
+  cursor: pointer;
+  background-color: var(--rk-color-surface, #fff);
+  /* Inline chevron so the kit needs no icon assets. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%237a7168' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 0.7rem;
+  border: 1px solid var(--rk-color-border, #e6e1da);
+  border-radius: var(--rk-radius-md, 10px);
+}
+
+.select:focus-visible {
+  outline: none;
+  box-shadow: var(--rk-focus-ring, 0 0 0 3px rgba(194, 65, 12, 0.35));
+}
+
+.select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

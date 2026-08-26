@@ -1,0 +1,36 @@
+/**
+ * Design tokens for the Recipe UI Kit.
+ *
+ * Every component reads these through `var(--rk-*, <fallback>)`, so the library
+ * still looks correct when this stylesheet is not loaded. Import it once in the
+ * host application to theme the whole kit, or override any token on a wrapper
+ * element to theme a subtree.
+ */
+:root {
+  --rk-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --rk-color-surface: #ffffff;
+  --rk-color-surface-alt: #f7f5f2;
+  --rk-color-border: #e6e1da;
+  --rk-color-text: #1f1b16;
+  --rk-color-muted: #7a7168;
+
+  --rk-color-primary: #c2410c;
+  --rk-color-primary-hover: #9a3412;
+  --rk-color-primary-soft: #fff1e7;
+  --rk-color-on-primary: #ffffff;
+
+  --rk-color-danger: #b42318;
+  --rk-color-danger-soft: #fef3f2;
+
+  --rk-radius-sm: 6px;
+  --rk-radius-md: 10px;
+  --rk-radius-lg: 16px;
+  --rk-radius-pill: 999px;
+
+  --rk-shadow-sm: 0 1px 2px rgba(31, 27, 22, 0.06);
+  --rk-shadow-md: 0 4px 12px rgba(31, 27, 22, 0.08);
+  --rk-shadow-lg: 0 16px 40px rgba(31, 27, 22, 0.18);
+
+  --rk-focus-ring: 0 0 0 3px rgba(194, 65, 12, 0.35);
+}
