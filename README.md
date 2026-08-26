@@ -4,7 +4,7 @@ Assignment solution: a recipe discovery and weekly meal-planning app built with 
 
 | | |
 | --- | --- |
-| **Live app** | _TBD — Vercel URL_ |
+| **Live app** | https://recipe-finder-meal-planner-tawny.vercel.app |
 | **npm package** | https://www.npmjs.com/package/@mayank_singh28/recipe-ui-kit |
 | **Recipe data** | [TheMealDB](https://www.themealdb.com) — free, no API key |
 

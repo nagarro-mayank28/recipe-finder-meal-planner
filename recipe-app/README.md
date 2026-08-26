@@ -4,7 +4,7 @@ A recipe discovery and weekly meal-planning app built with **Svelte 5**, **Svelt
 
 | | |
 | --- | --- |
-| **Live app** | _TBD — Vercel URL_ |
+| **Live app** | https://recipe-finder-meal-planner-tawny.vercel.app |
 | **npm package** | https://www.npmjs.com/package/@mayank_singh28/recipe-ui-kit |
 | **GitHub repo** | https://github.com/nagarro-mayank28/recipe-finder-meal-planner |
 | **Recipe data** | [TheMealDB](https://www.themealdb.com) (free, no API key) |
