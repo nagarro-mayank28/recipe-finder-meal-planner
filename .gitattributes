@@ -11,5 +11,5 @@
 *.woff binary
 *.woff2 binary
 
-# Generated lockfiles: keep them in the repo but out of diff review noise.
-package-lock.json linguist-generated=true -diff
+# Generated lockfiles: keep them in the repo but collapsed in diffs on GitHub.
+package-lock.json linguist-generated=true
