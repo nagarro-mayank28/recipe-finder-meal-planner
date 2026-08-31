@@ -1,12 +1,12 @@
 # Recipe Finder & Meal Planner
 
-Assignment solution: a recipe discovery and weekly meal-planning app built with **Svelte 5** and **SvelteKit**, consuming a reusable **StencilJS** web-component library that is published to npm.
+NAGP Assignment solution: a recipe discovery and weekly meal-planning app built with **Svelte 5** and **SvelteKit**, consuming a reusable **StencilJS** web-component library that is published to npm.
 
-| | |
-| --- | --- |
-| **Live app** | https://recipe-finder-meal-planner-tawny.vercel.app |
+|                 |                                                             |
+| --------------- | ----------------------------------------------------------- |
+| **Live app**    | https://recipe-finder-meal-planner-tawny.vercel.app         |
 | **npm package** | https://www.npmjs.com/package/@mayank_singh28/recipe-ui-kit |
-| **Recipe data** | [TheMealDB](https://www.themealdb.com) — free, no API key |
+| **Recipe data** | [TheMealDB](https://www.themealdb.com) — free, no API key   |
 
 ## Repository layout
 
@@ -40,12 +40,12 @@ Requires Node 20.19+ or 22.12+.
 
 ## What's where
 
-| Looking for | Read |
-| --- | --- |
-| Setup, dev server, assumptions, architecture | [`recipe-app/README.md`](recipe-app/README.md) |
+| Looking for                                                      | Read                                                                         |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Setup, dev server, assumptions, architecture                     | [`recipe-app/README.md`](recipe-app/README.md)                               |
 | How SvelteKit consumes the web components (props, events, slots) | [`recipe-app/README.md`](recipe-app/README.md#consuming-the-stencil-library) |
-| Component API, theming tokens, publishing and versioning | [`recipe-ui-kit/readme.md`](recipe-ui-kit/readme.md) |
-| Per-component prop/event/slot tables | `recipe-ui-kit/src/components/<tag>/readme.md` |
+| Component API, theming tokens, publishing and versioning         | [`recipe-ui-kit/readme.md`](recipe-ui-kit/readme.md)                         |
+| Per-component prop/event/slot tables                             | `recipe-ui-kit/src/components/<tag>/readme.md`                               |
 
 ## The eight components
 
