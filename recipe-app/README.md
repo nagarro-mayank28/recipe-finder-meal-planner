@@ -13,7 +13,7 @@ A recipe discovery and weekly meal-planning app built with **Svelte 5**, **Svelt
 
 ## What it does
 
-**Recipe discovery** — Search TheMealDB by name and narrow results by category and cuisine. Search state lives in the URL (`/?q=chicken&category=Chicken`), so results are server-rendered, shareable and survive a refresh.
+**Recipe discovery** — Three ways in: search TheMealDB by name, browse by category from the chip row, or narrow results with the category and cuisine filters. "Surprise me" jumps to a random recipe. Discovery state lives in the URL (`/?q=chicken&category=Chicken`), so results are server-rendered, shareable and survive a refresh; with no query at all the page browses a rotating category rather than a fixed one, and says which.
 
 **Recipe details** — A dedicated page per recipe with the full ingredient list, numbered instructions, tags, and links to the original source and video.
 
@@ -21,7 +21,7 @@ A recipe discovery and weekly meal-planning app built with **Svelte 5**, **Svelt
 
 **Favourites** — Save any recipe with one tap; a live count sits in the nav.
 
-**Weekly meal planner** — A 7-day × 3-meal grid. Assign recipes from your favourites, your own recipes, or a fresh search; replace or remove any planned meal.
+**Weekly meal planner** — A 7-day × 3-meal grid. Assign recipes from your favourites, your own recipes, or a fresh search. Every filled slot can be changed (swap in a different recipe), moved (to another day or meal) or removed, without leaving the grid.
 
 ---
 
@@ -65,7 +65,7 @@ The app never imports component source. It depends on the published package:
 ```jsonc
 // package.json
 "dependencies": {
-  "@mayank_singh28/recipe-ui-kit": "^1.0.0"
+  "@mayank_singh28/recipe-ui-kit": "^1.0.1"
 }
 ```
 
@@ -108,12 +108,13 @@ Stencil emits camelCase events; Svelte 5's `on<EventName>` attribute preserves t
 
 ```svelte
 <rk-recipe-card
-	onrkFavoriteToggle={(event) => favorites.toggle(event.detail)}
+	onrkFavoriteToggle={(event) =>
+		event.detail.favorite ? favorites.add(recipe) : favorites.remove(event.detail.recipeId)}
 	onrkOpen={(event) => goto(`/recipes/${event.detail}`)}
 />
 ```
 
-Handlers act on `event.detail` — the state the component *asked* for — rather than flipping the app's own copy, so a double-fired event cannot undo itself.
+Handlers act on `event.detail` — the state the component *asked* for — rather than flipping the app's own copy, so a double-fired event cannot undo itself. Note that `rkFavoriteToggle` carries `{ recipeId, favorite }` while `rkOpen` carries the id as a bare string; the payload types come from the package, so `svelte-check` enforces the difference.
 
 ### Slots
 
@@ -124,7 +125,7 @@ Handlers act on `event.detail` — the state the component *asked* for — rathe
 | `rk-recipe-card` | `actions` | Owner-only Edit / Delete, and "+ Plan" |
 | `rk-modal` | default, `footer` | Dialog body and its action row |
 | `rk-ingredient-list` | `header` | Ingredient-count badge |
-| `rk-meal-slot` | default | "Yours" badge on user recipes |
+| `rk-meal-slot` | default | "Yours" badge, plus the Change / Move buttons on a filled slot |
 | `rk-empty-state` | default | The call-to-action button |
 
 ---

@@ -7,6 +7,7 @@
 	 */
 	import { searchRecipes } from '$lib/api/mealdb';
 	import { favorites } from '$lib/stores/favorites.svelte';
+	import { mealPlan } from '$lib/stores/mealPlan.svelte';
 	import { userRecipes } from '$lib/stores/userRecipes.svelte';
 	import { titleCase, type Day, type Meal, type RecipeSummary } from '$lib/types';
 
@@ -43,6 +44,13 @@
 	let list = $derived<RecipeSummary[]>(
 		source === 'favorites' ? favorites.all : source === 'mine' ? ownRecipes : searchResults
 	);
+
+	/**
+	 * Whatever the target slot already holds. Opening the picker on a filled slot
+	 * is the "change this meal" flow, so the dialog says *replace* rather than
+	 * silently overwriting — same target, same `assign` call, clearer wording.
+	 */
+	let occupant = $derived(target ? mealPlan.get(target.day, target.meal) : undefined);
 
 	/**
 	 * Search is fired from the input's own debounce rather than an effect, so
@@ -93,10 +101,18 @@
 
 <rk-modal
 	open={open}
-	heading={target ? `Add to ${titleCase(target.day)} ${target.meal}` : 'Add a recipe'}
+	heading={target
+		? `${occupant ? 'Change' : 'Add to'} ${titleCase(target.day)} ${target.meal}`
+		: 'Add a recipe'}
 	onrkClose={close}
 >
 	<div class="body">
+		{#if occupant}
+			<p class="replacing" role="status">
+				Currently <strong>{occupant.name}</strong> — picking a recipe replaces it.
+			</p>
+		{/if}
+
 		<div class="tabs" role="tablist" aria-label="Recipe source">
 			{#each tabs as tab (tab.id)}
 				<button
@@ -250,6 +266,14 @@
 
 	.note--error {
 		color: var(--rk-color-danger);
+	}
+
+	.replacing {
+		margin: 0;
+		padding: 0.6rem 0.75rem;
+		font-size: 0.85rem;
+		background: var(--rk-color-surface-alt);
+		border-radius: var(--rk-radius-md);
 	}
 
 	.options {

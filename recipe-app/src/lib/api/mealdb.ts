@@ -152,7 +152,7 @@ export async function getRecipe(id: string, fetchFn: Fetch = fetch): Promise<Rec
 	return raw ? toRecipe(raw) : null;
 }
 
-/** A single random recipe, used to seed the landing page. */
+/** A single random recipe, behind the discovery page's "Surprise me" button. */
 export async function randomRecipe(fetchFn: Fetch = fetch): Promise<Recipe | null> {
 	const data = await request<{ meals: RawMeal[] | null }>('/random.php', fetchFn);
 	const raw = data.meals?.[0];
@@ -198,6 +198,36 @@ export interface DiscoverQuery {
 }
 
 /**
+ * Categories used for the no-query landing grid.
+ *
+ * Not the full `list.php?c=list` set on purpose: a few upstream categories hold
+ * only a handful of recipes, which makes the landing grid look broken. These
+ * eight are all well stocked. Browsing the complete set is a click away through
+ * the category chips.
+ */
+const BROWSE_CATEGORIES = [
+	'Chicken',
+	'Beef',
+	'Seafood',
+	'Vegetarian',
+	'Pasta',
+	'Dessert',
+	'Breakfast',
+	'Lamb'
+] as const;
+
+/**
+ * Pick the category to land on when the visitor has not asked for anything.
+ *
+ * Rotating rather than pinning one category means the landing page shows
+ * something different each visit, which is the point of browsing. It is chosen
+ * in `load`, so the server and the hydrating client agree on the result.
+ */
+export function pickBrowseCategory(): string {
+	return BROWSE_CATEGORIES[Math.floor(Math.random() * BROWSE_CATEGORIES.length)];
+}
+
+/**
  * Resolve the discovery page's combined query.
  *
  * TheMealDB has no endpoint that accepts a search term *and* filters together,
@@ -206,7 +236,7 @@ export interface DiscoverQuery {
  *
  * - search term present -> `search.php` (full records), then filter locally.
  * - filters only        -> `filter.php` per filter, intersected by id.
- * - nothing at all      -> a default category so the grid is never empty.
+ * - nothing at all      -> a rotating browse category so the grid is never empty.
  */
 export async function discoverRecipes(
 	query: DiscoverQuery,
@@ -241,6 +271,7 @@ export async function discoverRecipes(
 		return filterRecipes('area', area, fetchFn);
 	}
 
-	// Landing state: a well-stocked category reads better than an empty grid.
-	return filterRecipes('category', 'Chicken', fetchFn);
+	// Landing state. `load` normally picks the browse category itself so it can
+	// label the grid; this branch is the fallback for a bare call.
+	return filterRecipes('category', pickBrowseCategory(), fetchFn);
 }

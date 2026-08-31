@@ -1,4 +1,10 @@
-import { discoverRecipes, listAreas, listCategories, MealDbError } from '$lib/api/mealdb';
+import {
+	discoverRecipes,
+	listAreas,
+	listCategories,
+	MealDbError,
+	pickBrowseCategory
+} from '$lib/api/mealdb';
 import type { RecipeSummary } from '$lib/types';
 import type { PageLoad } from './$types';
 
@@ -14,9 +20,17 @@ export const load: PageLoad = async ({ fetch, url }) => {
 	const category = url.searchParams.get('category') ?? '';
 	const area = url.searchParams.get('area') ?? '';
 
+	/**
+	 * With no search and no filters the page is in browse mode: pick a category
+	 * to fill the grid and tell the UI which one, so it can say so instead of
+	 * passing a canned list off as "all recipes". It stays out of `category`,
+	 * which mirrors the URL and drives the filter dropdown.
+	 */
+	const browseCategory = !search && !category && !area ? pickBrowseCategory() : '';
+
 	// Filter choices are independent of the results, so fetch all three together.
 	const [recipesResult, categoriesResult, areasResult] = await Promise.allSettled([
-		discoverRecipes({ search, category, area }, fetch),
+		discoverRecipes({ search, category: category || browseCategory, area }, fetch),
 		listCategories(fetch),
 		listAreas(fetch)
 	]);
@@ -40,6 +54,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 		search,
 		category,
 		area,
+		browseCategory,
 		// A failed filter list is not worth failing the page over - the filter
 		// simply renders disabled.
 		categories: categoriesResult.status === 'fulfilled' ? categoriesResult.value : [],

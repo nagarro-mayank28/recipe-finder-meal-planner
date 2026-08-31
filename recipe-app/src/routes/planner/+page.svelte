@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
+	import MoveSlotDialog from '$lib/components/MoveSlotDialog.svelte';
 	import RecipePickerDialog from '$lib/components/RecipePickerDialog.svelte';
 	import { mealPlan } from '$lib/stores/mealPlan.svelte';
 	import { DAYS, MEALS, titleCase, type Day, type Meal, type RecipeSummary } from '$lib/types';
@@ -8,6 +9,8 @@
 
 	let pickerSlot = $state<{ day: Day; meal: Meal } | null>(null);
 	let pickerOpen = $state(false);
+	let moveSlot = $state<{ day: Day; meal: Meal } | null>(null);
+	let moveOpen = $state(false);
 	let clearOpen = $state(false);
 
 	/** `rkAssign` from an empty slot - open the picker for that day and meal. */
@@ -15,6 +18,23 @@
 		const { day, meal } = event.detail;
 		pickerSlot = { day: day as Day, meal: meal as Meal };
 		pickerOpen = true;
+	}
+
+	/**
+	 * The two "modify" entry points on a filled slot.
+	 *
+	 * Both are app-owned buttons projected into `rk-meal-slot`'s default slot
+	 * rather than new component props: the library stays a dumb presenter, and the
+	 * planner gains a real edit affordance without a breaking release.
+	 */
+	function openChange(day: Day, meal: Meal) {
+		pickerSlot = { day, meal };
+		pickerOpen = true;
+	}
+
+	function openMove(day: Day, meal: Meal) {
+		moveSlot = { day, meal };
+		moveOpen = true;
 	}
 
 	function handleRemove(event: CustomEvent<RkMealSlotDetail>) {
@@ -103,8 +123,31 @@
 							onrkRemove={handleRemove}
 							onrkOpen={handleOpen}
 						>
-							{#if planned?.origin === 'user'}
-								<rk-badge variant="danger" label="Yours"></rk-badge>
+							{#if planned}
+								<div class="slot-extras">
+									{#if planned.origin === 'user'}
+										<rk-badge variant="danger" label="Yours"></rk-badge>
+									{/if}
+
+									<div class="slot-actions">
+										<button
+											class="slot-action"
+											type="button"
+											aria-label="Change the recipe for {titleCase(day)} {meal}"
+											onclick={() => openChange(day, meal)}
+										>
+											Change
+										</button>
+										<button
+											class="slot-action"
+											type="button"
+											aria-label="Move {planned.name} from {titleCase(day)} {meal} to another slot"
+											onclick={() => openMove(day, meal)}
+										>
+											Move
+										</button>
+									</div>
+								</div>
 							{/if}
 						</rk-meal-slot>
 					</div>
@@ -126,6 +169,8 @@
 
 <!-- Named `target`, not `slot`: `slot` is reserved for slot projection in Svelte. -->
 <RecipePickerDialog target={pickerSlot} bind:open={pickerOpen} onpick={assignPicked} />
+
+<MoveSlotDialog from={moveSlot} bind:open={moveOpen} />
 
 <rk-modal open={clearOpen} heading="Clear the whole week?" onrkClose={() => (clearOpen = false)}>
 	<p>
@@ -177,6 +222,47 @@
 
 	.cell {
 		min-width: 0;
+	}
+
+	/*
+	   Projected into `rk-meal-slot`'s default slot, so these live in the light DOM
+	   and are styled here rather than by the component.
+	*/
+	.slot-extras {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem;
+		/* Push the actions to the bottom of the cell, whatever the title height. */
+		margin-top: auto;
+	}
+
+	.slot-actions {
+		display: flex;
+		gap: 0.25rem;
+		margin-left: auto;
+	}
+
+	.slot-action {
+		padding: 0.15rem 0.4rem;
+		font: inherit;
+		font-size: 0.68rem;
+		font-weight: 650;
+		cursor: pointer;
+		color: var(--rk-color-muted);
+		background: transparent;
+		border: 1px solid var(--rk-color-border);
+		border-radius: var(--rk-radius-sm);
+	}
+
+	.slot-action:hover {
+		color: var(--rk-color-primary);
+		border-color: var(--rk-color-primary);
+	}
+
+	.slot-action:focus-visible {
+		outline: none;
+		box-shadow: var(--rk-focus-ring);
 	}
 
 	/* Below this width the three-column grid stops being readable, so each day

@@ -18,7 +18,7 @@ recipe-ui-kit/     StencilJS component library (published to npm)  →  see reci
 The two are independent npm projects. The app does **not** import the library from source — it depends on the published package, exactly as any other consumer would:
 
 ```jsonc
-"dependencies": { "@mayank_singh28/recipe-ui-kit": "^1.0.0" }
+"dependencies": { "@mayank_singh28/recipe-ui-kit": "^1.0.1" }
 ```
 
 ## Quick start
