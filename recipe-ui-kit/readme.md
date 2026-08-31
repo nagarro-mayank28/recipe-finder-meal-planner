@@ -181,7 +181,9 @@ npm publish                 # access:public is set in publishConfig
 - **minor** — new component, new optional prop, new event
 - **major** — renamed or removed prop/event/slot, or changed event payload
 
-Consumers should pin a caret range (`^1.0.0`) so they receive fixes without breaking changes.
+Consumers should pin a caret range (`^1.0.1`) so they receive fixes without breaking changes.
+
+Released versions are recorded in [`CHANGELOG.md`](CHANGELOG.md). `1.0.1` is a worked example of the patch rule: a filled `rk-meal-slot` resolved 21px wider than an empty one because the two states are a `<div>` and a `<button>` and disagreed on the default `box-sizing`. Styling only, no contract change, so the patch digit moved and consumers on `^1.0.0` picked it up with no edit.
 
 ## Licence
 

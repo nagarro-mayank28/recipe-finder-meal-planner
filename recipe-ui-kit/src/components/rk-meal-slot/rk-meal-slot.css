@@ -13,6 +13,12 @@
   padding: 0.6rem;
   text-align: left;
   border-radius: var(--rk-radius-md, 10px);
+  /* The empty state is a <button> and the filled state a <div>, and the two
+     disagree on the UA default: buttons are border-box, divs content-box. With
+     `width: 100%` plus padding and a border that made the filled slot 21px
+     wider than its grid cell, so a planned meal spilled into the next column.
+     Setting it explicitly keeps both states the same width. */
+  box-sizing: border-box;
 }
 
 .label {

@@ -1,6 +1,6 @@
 {
   "name": "@mayank_singh28/recipe-ui-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Framework-agnostic web components for recipe discovery and meal planning UIs, built with StencilJS.",
   "license": "MIT",
   "author": "Mayank Singh",
@@ -50,7 +50,8 @@
   },
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "stencil build",
