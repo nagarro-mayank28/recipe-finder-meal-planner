@@ -27,7 +27,7 @@ The two are independent npm projects. The app does **not** import the library fr
 # the app
 cd recipe-app
 npm install
-npm run dev          # http://localhost:5173
+npm run dev          # By default http://localhost:5173
 
 # the component library (only needed to change the components)
 cd recipe-ui-kit
